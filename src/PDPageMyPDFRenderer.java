@@ -24,11 +24,11 @@ public class PDPageMyPDFRenderer implements MyPDFRenderer {
         PDPageTree allPages = pdDocument.getDocumentCatalog().getPages();
         int length = allPages.getCount();
         PDFont font = PDType1Font.HELVETICA;
+
         float fontSize = 15.0f;
 
         for ( int i = 0 ; i < length ; i++ ) {
             PDPage page = (PDPage)allPages.get(i);
-//                PDRectangle pageSize = page.findMediaBox();
             PDRectangle pageSize = page.getMediaBox();
             String strPage = new StringBuilder().append(i+1).append("/").append(length).toString();
             float stringWidth = font.getStringWidth(strPage)*fontSize/1000f;
@@ -37,11 +37,9 @@ public class PDPageMyPDFRenderer implements MyPDFRenderer {
             PDPageContentStream contentStream = new PDPageContentStream(pdDocument, page, true, true, true);
             contentStream.beginText();
             contentStream.setFont(font, fontSize);
-//                contentStream.setTextTranslation(pageWidth - stringWidth - 15, pageHeight - 20);
             Matrix matrix = new Matrix();
             matrix.translate(pageWidth - stringWidth - 15, pageHeight - 20);
             contentStream.setTextMatrix(matrix);
-//                contentStream.drawString(strPage);
             contentStream.showText(strPage);
             contentStream.endText();
             contentStream.close();
